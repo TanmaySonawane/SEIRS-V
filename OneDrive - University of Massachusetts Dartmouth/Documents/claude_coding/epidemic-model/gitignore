@@ -1,0 +1,112 @@
+# .gitignore
+# ==========
+# Tells Git which files and folders to never track or upload.
+# This keeps your repository clean and prevents accidentally
+# committing credentials, large data files, or machine-specific
+# settings that would break the project for other users.
+
+# =============================================================================
+# PYTHON CACHE AND COMPILED FILES
+# =============================================================================
+# Python creates these automatically when it imports your modules.
+# They are machine-specific and regenerated automatically — never commit them.
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# =============================================================================
+# VIRTUAL ENVIRONMENT
+# =============================================================================
+# Your local virtual environment folder. This contains gigabytes of
+# installed packages — never commit it. requirements.txt handles
+# dependency tracking instead.
+
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# =============================================================================
+# ENVIRONMENT VARIABLES AND SECRETS
+# =============================================================================
+# If you ever add API keys, database passwords, or secret tokens,
+# they go in a .env file. This line ensures they are NEVER committed.
+# Never remove this line.
+
+.env
+.env.local
+.env.*.local
+
+# =============================================================================
+# JUPYTER NOTEBOOKS
+# =============================================================================
+# Notebook checkpoints are auto-saved scratch files — not needed in Git.
+# The .ipynb files themselves ARE tracked (they contain your actual work).
+
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# =============================================================================
+# OPERATING SYSTEM FILES
+# =============================================================================
+# macOS Finder metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows Explorer metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =============================================================================
+# VS CODE
+# =============================================================================
+# VS Code workspace settings are personal — not project settings.
+# The .vscode/ folder CAN be committed if you want to share launch
+# configs and debugger settings with collaborators, but by default
+# we exclude it to keep the repo portable.
+
+.vscode/
+
+# =============================================================================
+# OUTPUT AND GENERATED FILES
+# =============================================================================
+# Simulation results, figures, and generated reports should not be
+# committed — they are reproducible from the code.
+# Exception: if you generate a specific figure for your paper, you
+# may want to commit it to the figures/ folder explicitly.
+
+outputs/
+results/
+*.csv
+*.json
+figures/
+*.png
+*.pdf
+
+# =============================================================================
+# PYTEST
+# =============================================================================
+
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# =============================================================================
+# DISTRIBUTION AND BUILD
+# =============================================================================
+# If you ever package this as a Python library (unlikely for this project
+# but good practice to include).
+
+dist/
+build/
+*.egg-info/
+*.egg
