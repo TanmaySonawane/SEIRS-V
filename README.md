@@ -1,3 +1,14 @@
+---
+title: SEIRS-V Epidemic Model
+emoji: 🦠
+colorFrom: red
+colorTo: blue
+sdk: streamlit
+sdk_version: "1.32.0"
+app_file: dashboard/app.py
+pinned: false
+---
+
 # SEIRS-V Epidemic Model
 
 An age-structured compartmental epidemic model with seasonal forcing,

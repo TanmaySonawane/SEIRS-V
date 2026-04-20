@@ -90,21 +90,10 @@ plotly>=5.20,<6.0
 
 
 # =============================================================================
-# 5. DEVELOPMENT ONLY
-# (Comment these out in production if deploying to a memory-limited server)
+# 5. DEVELOPMENT ONLY  (testing — not needed in production)
 # =============================================================================
 
-jupyter>=1.0,<2.0
-# Jupyter notebook support for exploration.ipynb scratch work.
-# NOT needed by Render or Streamlit Cloud — comment out before deploy
-# if you hit memory limits on the free tier.
-
 pytest>=8.0,<9.0
-# Test runner for tests/test_model.py.
-# Run all tests with: pytest tests/
-# NOT needed in production deployment.
-
-matplotlib>=3.8,<4.0
-# Static plotting for quick diagnostic checks during development.
-# Plotly is used for the dashboard; matplotlib for notebooks only.
-# NOT needed in production deployment.
+# Test runner for the validation suite.
+# Command: pytest tests/test_model.py -v
+# Not needed on Render or Streamlit Cloud; install locally only.
