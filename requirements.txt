@@ -1,0 +1,110 @@
+# requirements.txt
+# =================
+# All dependencies for the SEIRS-V epidemic model project.
+#
+# HOW TO USE
+# ----------
+# VIRTUAL ENVIRONMENT SETUP (do this once before installing)
+# ----------------------------------------------------------
+#     python -m venv venv
+#
+#     Windows:   venv\Scripts\activate
+#     Mac/Linux: source venv/bin/activate
+#
+#     Then: pip install -r requirements.txt
+#
+# WHY VERSIONS ARE PINNED
+# -----------------------
+# Pinning exact versions means the project behaves identically on your
+# laptop, on Render, and on Streamlit Cloud. Without pinning, a package
+# update could silently break your code between now and deployment.
+#
+# SECTIONS
+# --------
+#   1. Scientific core   — the model itself
+#   2. Web API           — FastAPI backend
+#   3. Dashboard         — Streamlit frontend
+#   4. Visualization     — plotting
+#   5. Development only  — testing, notebooks (not needed in production)
+
+
+# =============================================================================
+# 1. SCIENTIFIC CORE
+# =============================================================================
+
+numpy>=1.26,<2.0
+# Numerical arrays, matrix multiplication (@), linspace, percentile.
+# Used in: parameters.py, equations.py, sampler.py, solver.py, analysis.py
+# <2.0 pin: numpy 2.x has breaking API changes still being adopted.
+
+scipy>=1.12,<2.0
+# ODE solver (integrate.solve_ivp), statistics (stats distributions),
+# and Latin Hypercube Sampling (stats.qmc.LatinHypercube).
+# Used in: parameters.py, sampler.py, solver.py, analysis.py
+
+pandas>=2.1,<3.0
+# Tabular results storage, CSV export, ensemble summary DataFrames.
+# Used in: solver.py, analysis.py, dashboard/app.py
+
+
+# =============================================================================
+# 2. WEB API  (FastAPI backend)
+# =============================================================================
+
+fastapi>=0.110,<1.0
+# The web framework for the REST API.
+# Provides: request routing, automatic JSON parsing, OpenAPI docs.
+# Used in: api/main.py
+
+uvicorn>=0.29,<1.0
+# ASGI server that runs the FastAPI application.
+# Command: uvicorn api.main:app --reload
+# Used in: deployment (Render runs this command)
+
+pydantic>=2.0,<3.0
+# Data validation for API request and response bodies.
+# FastAPI uses Pydantic internally — also used explicitly in api/main.py
+# to define request schemas with type checking.
+
+
+# =============================================================================
+# 3. DASHBOARD  (Streamlit frontend)
+# =============================================================================
+
+streamlit>=1.32,<2.0
+# The entire web dashboard framework.
+# Turns Python scripts into interactive web apps with sliders,
+# dropdowns, and live-updating charts.
+# Used in: dashboard/app.py
+
+
+# =============================================================================
+# 4. VISUALIZATION
+# =============================================================================
+
+plotly>=5.20,<6.0
+# Interactive charts: epidemic curves, CI ribbons, R0 histograms,
+# sensitivity tornado charts, parameter distribution plots.
+# Used in: dashboard/app.py, notebooks/exploration.ipynb
+# Streamlit renders Plotly figures natively with st.plotly_chart()
+
+
+# =============================================================================
+# 5. DEVELOPMENT ONLY
+# (Comment these out in production if deploying to a memory-limited server)
+# =============================================================================
+
+jupyter>=1.0,<2.0
+# Jupyter notebook support for exploration.ipynb scratch work.
+# NOT needed by Render or Streamlit Cloud — comment out before deploy
+# if you hit memory limits on the free tier.
+
+pytest>=8.0,<9.0
+# Test runner for tests/test_model.py.
+# Run all tests with: pytest tests/
+# NOT needed in production deployment.
+
+matplotlib>=3.8,<4.0
+# Static plotting for quick diagnostic checks during development.
+# Plotly is used for the dashboard; matplotlib for notebooks only.
+# NOT needed in production deployment.
