@@ -41,6 +41,10 @@ st.cache_data  — caches the return value of a function based on
                  an unrelated slider.
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import streamlit as st
 import plotly.graph_objects as go

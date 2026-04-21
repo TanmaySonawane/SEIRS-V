@@ -139,6 +139,13 @@ def compute_dfe(params: dict) -> dict:
             S* = mu*N*(omega_v + mu) / D
             V* = nu*S* / (omega_v + mu)
         """
+        if mu == 0.0:
+            # No vital dynamics: steady state is S*=N*(omega_v/(omega_v+nu)),
+            # V*=N*(nu/(omega_v+nu)). When nu=0 as well, S*=N, V*=0.
+            denom = omega_v + nu
+            if denom == 0.0:
+                return float(N), 0.0
+            return float(N) * omega_v / denom, float(N) * nu / denom
         D      = mu * (omega_v + mu) + nu * mu
         S_star = mu * N * (omega_v + mu) / D
         V_star = nu * S_star / (omega_v + mu)

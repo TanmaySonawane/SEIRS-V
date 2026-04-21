@@ -203,14 +203,16 @@ class TestConservation:
         )
 
     def test_conservation_ensemble(self, small_ensemble):
-        """Conservation must hold across every ensemble member."""
+        """Conservation must hold for every individual ensemble member."""
         N = POPULATION["N"]
-        # Check median trajectory (representative of ensemble behavior)
-        median_pop = small_ensemble.median.sum(axis=1)
-        max_drift  = np.max(np.abs(median_pop - N))
-        assert max_drift < 2.0, (
-            f"Ensemble median population drifted by {max_drift:.4f}."
-        )
+        # Check each run independently — per-compartment medians do not
+        # sum to N because they come from different ensemble members.
+        for i, traj in enumerate(small_ensemble.trajectories):
+            pop_at_each_step = traj.sum(axis=1)
+            max_drift = np.max(np.abs(pop_at_each_step - N))
+            assert max_drift < 2.0, (
+                f"Ensemble member {i} drifted by {max_drift:.4f}."
+            )
 
 
 # =============================================================================
@@ -250,11 +252,15 @@ class TestDegenerateCase:
         p["nu2"]     = 0.0      # no adult vaccination
         p["omega"]   = 0.0      # permanent immunity (no waning)
         p["mu"]      = 0.0      # no births or deaths
-        # Make contact matrix symmetric so both groups behave identically
-        # c_ij = 1 for all i,j means uniform mixing — equivalent to scalar
+        p["beta0"]   = 0.5      # R0 = beta0/gamma = 0.5/0.1 = 5 > 1
+        # Zero cross-group contacts so each group is an independent scalar
+        # SEIR. With c_12=c_21=0, K is diagonal and R0 = beta0*c_ii/gamma
+        # exactly, matching the single-group scalar formula.
+        # Using c_ij=1 for all i,j with N1≠N2 gives R0=2*beta0/gamma
+        # because the two unequal groups create asymmetric NGM entries.
         p["c11"] = 1.0
-        p["c12"] = 1.0
-        p["c21"] = 1.0
+        p["c12"] = 0.0
+        p["c21"] = 0.0
         p["c22"] = 1.0
         return p
 
@@ -378,11 +384,14 @@ class TestThresholdBehavior:
         continuously, so the epidemic may not go to exactly zero —
         but it must clearly decline from the initial seed.
         """
-        short_t = np.linspace(0, 365, 365)
+        # Run full 5 years: R0<1 at the DFE but the simulation starts with
+        # zero vaccinated people, so the epidemic grows initially while
+        # vaccination accumulates. By year 5 the DFE is reached and I→0.
+        long_t = np.linspace(0, 1825, 1825)
         result  = run_single(
             params=high_vaccination_params,
-            t_eval=short_t,
-            time_span=(0, 365),
+            t_eval=long_t,
+            time_span=(0, 1825),
         )
         I_initial = result.y[0,  2] + result.y[0,  7]
         I_final   = result.y[-1, 2] + result.y[-1, 7]
